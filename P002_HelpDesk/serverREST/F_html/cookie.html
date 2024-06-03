@@ -1,0 +1,139 @@
+<style>
+    :root{
+        --margine : 30px;
+    }
+    .cookie {
+        z-index: 999;
+        padding-top: 30px;
+        background-color: #e3dee3;
+        position: fixed;
+        width: fit-content;
+        padding: 30px;
+        bottom: 0;
+        height: 300px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #9f9a9f;
+        border-radius: 10px;
+        align-items: center;
+
+        display : none;
+
+        color : black;
+
+    }
+
+    .cookie p{
+        display: block;
+        margin-left: var(--margine);
+        margin-right: var(--margine);
+    }
+
+
+    .cookie button
+    {
+        background-color: #6750a4;
+        width: 200px;
+    }
+
+    .cookie #rifiuta,
+    .cookie #preferenze{
+        background-color: #c7b8f0;
+        color: black;
+    }
+    #privacy-container{
+        margin-left : var(--margine);
+    }
+
+    #privacy-container a{
+        text-decoration: underline;
+    }
+
+    #bottoni-container{
+        margin-left : 15px;
+    }
+</style>
+
+
+<div class="cookie">
+    <div class="container">
+        <h4>Questo sito usa i Cookie</h4>
+        <p>
+            Per fornire le migliori esperienze, utilizziamo tecnologie come i cookie per memorizzare e/o accedere alle
+            informazioni del dispositivo. Il consenso a queste tecnologie ci permetterà di elaborare dati come il
+            comportamento di navigazione o ID unici su questo sito. Non acconsentire o ritirare il consenso può influire
+            negativamente su alcune caratteristiche e funzioni.
+            <br>
+        </p>
+        <div class="opzioni-container">
+            <nav class="row center" id="bottoni-container">
+                <button id="accetta">
+                    <i>Cookie</i>
+                    <span>Accetta</span>
+                </button>
+
+                <button id="rifiuta">
+                    <i>close</i>
+                    <span>Rifiuta</span>
+                </button>
+
+                
+                <button id="preferenze">
+                    <span>Personalizza</span>
+                </button>
+            </nav>
+        </div>
+        <div id="privacy-container">
+            <span><a href="privacy-policy">Privacy Policy</a></span>
+            <span><a href="privacy-policy">Cookie Policy</a></span>
+        </div>
+    </div>
+</div>
+
+<!-- Cookie -->
+<script>
+    setCookie = (name,value,expDays)=>{
+        let date = new Date();
+        //scadenza cookie
+        date.setTime(date.getTime() + (expDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + "; path/";
+    };
+
+    getCookie = (cName)=>{
+        const name = cName + "=";
+        const cDecoded = decodeURIComponent(document.cookie);
+        const cArr = cDecoded.split("; ");
+        let value;
+        cArr.forEach(val=>{
+            if(val.indexOf(name) === 0) value = val.substring(name.length);
+        });
+        return value;
+    };
+
+
+
+    let cookie = document.querySelector(".cookie");
+    let btn_accetta = cookie.querySelector("#accetta");
+    btn_accetta.addEventListener("click", () => {
+        cookie.style["display"] = "none";
+        setCookie("cookie_accept",true,30);
+    });
+
+    cookieMessage = ()=>{
+        if(!getCookie("cookie_accept")){
+            cookie.style["display"] = "block";
+        }
+    };
+    window.addEventListener("load",cookieMessage);
+
+
+
+    let preferenze = cookie.querySelector("#preferenze");
+    preferenze.addEventListener("click", () => {
+        window.location.href = "custom_cookie";
+
+    });
+</script>

@@ -1,0 +1,455 @@
+# metadati
+openapi: 3.0.3
+info:
+  title: Documentazione sulle OpenAPI del progetto Helpdesk di Katch7K
+  description: >
+    Questo è la documentazione del progetto finale tra TPSIT e Informatica,<br>
+    la locazione del progetto sarà in 1 repository<br>
+    [Parte web](https://github.com/Zuccante/5ia-consegna-lavori-2023-2024-Katch7K/tree/main/P002_HelpDesk)
+  version: "1.0"
+servers:
+  - url: https://127.0.0.1/P002_Helpdesk
+    description: il server userà il framework fatfree per gestire le route. Cambierà il route a seconda dell'indirizzo del server
+
+#tags
+tags:
+  - name: Utente
+    description: Tutti gli utenti della scuola
+  - name: Dispositivo
+    description: Tutti i dispositivi della scuola
+  - name: Segnalazione
+    description: Tutte le segnalazioni fatte nella scuola
+  - name: Notifica
+    description: Notifiche che vengono spedite ai tecnici assegnati per i guasti al computer
+  - name: Stanza
+    description: Le stanze della scuola interessata contenuta nel helpdesk
+  - name: Alert
+    description: La messa in alerta dei tecnici per le stanze o per i dispositivi
+
+#path
+paths:
+  /utenti:
+    get:
+      summary: ritorna una lista di tutti gli utenti.
+      tags:
+        - Utente
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200": # status code
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Utente"
+
+  /utente/@id:
+    get:
+      summary: la le informazioni dell'utente tramite il suo id.
+      tags:
+        - Utente
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200": # status code
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Utente"
+
+  /aggiorna-utente:
+    put:
+      tags:
+        - Utente
+      summary: Aggiorna i dati riguardante l'utente come il suo ruolo, ban e mansione se è un tecnico
+
+      parameters:
+        - name: codice_stanza
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: L'inserimento della password è andato a buon fine
+
+  /dispositivi:
+    get:
+      summary: ritorna la lista di tutti i dispositivi della scuola.
+      tags:
+        - Dispositivo
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200":
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dispositivo"
+  /dispositivi?stanza:
+    get:
+      summary: Ritorna una lista di dispositivi presenti nella stanza data
+      tags:
+        - Dispositivo
+      parameters:
+        - name: codice_aula
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+
+  /segnalazione:
+    get:
+      summary: Ritorna una lista di tutte le segnalazioni effettuate nella storia
+      tags:
+        - Segnalazione
+      parameters:
+        - name: codice_aula
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+
+    delete:
+      tags:
+        - Segnalazione
+      summary: Cancella una determinata segnalazione dato l'ID
+      parameters:
+        - name: id
+          in: path
+          description: ID della segnalazione da
+          required: true
+          schema:
+            type: string
+        - name: data
+          in: path
+          description: ID della segnalazione da
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Segnalazione cancellata con successo
+
+  /formDaMobile :
+    post:
+      summary: Invia al server una nuova segnalazioni passati i parametri
+      tags:
+        - Segnalazione
+      parameters:
+        - name: codice_aula
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+
+  /notifiche :
+    get:
+      summary: Ritorna una lista di notifiche da spedire (Funge da email da leggere)
+      tags:
+        - Notifica
+      parameters:
+        - name: codice_aula
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+  /notifica :
+    put:
+      summary: Aggiornare lo stato della notifica
+      tags:
+        - Notifica
+      parameters:
+        - name: codice_aula
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+    delete:
+      summary: Eliminare la notifica dal database
+      tags:
+        - Notifica
+      parameters:
+        - name: codice_aula
+          in: path # the location of paramether
+          required: true
+          description: parameter description in CommonMark or HTML.
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispositivo"
+
+
+  /stanze:
+    get:
+      summary: ritorna una lista di tutte le stanze della scuola Zuccante.
+      tags:
+        - Stanza
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200":
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dispositivo"
+  /alerts:
+    get:
+      summary: ritorna una lista degli alerts dei tecnici.
+      tags:
+        - Alert
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200":
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dispositivo"
+  /alert:
+    post:
+      summary: Inserisce un nuovo alert dentro database
+      tags:
+        - Alert
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200":
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dispositivo"
+    delete:
+      summary: Cancella l'alert dal database
+      tags:
+        - Alert
+
+      description: Questa chiamata ritorna un json che contiene tutte le informazioni degli utenti.
+      responses:
+        "200":
+          description: Un JSON array di nome utente
+          content:
+            application/json: # media type
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dispositivo"
+
+
+
+# components
+components:
+  schemas:
+    Utente:
+      type: object
+      required:
+        - email
+        - nome
+        - cognome
+        - token
+        - ban
+        - ruolo
+        - mansione
+      properties:
+        email:
+          type: string
+          example: "nome.cognome@itisuzccante.edu.it"
+        nome:
+          type: string
+          example: Nome
+        cognome:
+          type: string
+          example: Cognome
+        token:
+          type: string
+          example: aoidjwaoidjawoidjwaoidj
+        ban:
+          type: boolean
+          example: false
+
+        mansione:
+          type: string
+          example: testo di descrizione della mansione del tecnico
+    Stanza:
+      type: object
+      required:
+        - codice
+        - nome
+        - piano
+        - tipo
+      properties:
+        codice:
+          type: integer
+          format: int64
+          example: 1
+        nome:
+          type: string
+          example: LAS
+
+        piano:
+          type: integer
+
+        tipo:
+          type: string
+
+    Dispositivo:
+      type: object
+      properties:
+        codice:
+          type: integer
+          description: Codice univoco del dispositivo
+        nome:
+          type: string
+          description: Nome del dispositivo
+        tipo:
+          type: string
+          description: Tipo di dispositivo
+          enum: ["portatile", "fisso"]
+        codice_stanza:
+          type: integer
+          description: Codice della stanza in cui si trova il dispositivo
+      required:
+        - codice
+        - nome
+        - tipo
+
+    Segnalazione:
+      type: object
+      properties:
+        id_utente:
+          type: string
+          description: Rappresenta l'email dell'utente che segnala
+        data:
+          type: string
+          description: Data della segnalazione
+        descrizione:
+          type: string
+          description: Descrizione del problema
+
+        tipo:
+          type: integer
+          description: classificazioni di segnalazione
+          enum: ["strutturale", "tecnico"]
+        stato:
+          type: integer
+          description: Stato della segnalazione, se è in corso oppure è risolto.
+        id_dispositivo:
+          type: integer
+          description: codice del dispositivo
+        id_stanza:
+          type: integer
+          description: codice della stanza
+      required:
+        - id_utente
+        - data
+        - tipo
+        - stato
+    Notifica:
+      type: object
+      properties:
+        data:
+          type: string
+          description: tempo della notifica
+        tecnico:
+          type: string
+          description: email del tecnico/i assegnato/i
+        descrizione:
+          type: string
+          description: descrizione della segnalazione
+        stato:
+          type: boolean
+          description: verifica se i tecnici hanno riceuto l'email
+          enum: ["da inviare", "ricevuto"]
+      required:
+        - data
+        - tecnico
+        - descrizione
+    Piano:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Codice univoco del dispositivo
+        nome:
+          type: string
+          description: Nome del dispositivo
+      required:
+        - id
+        - nome

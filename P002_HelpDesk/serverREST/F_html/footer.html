@@ -1,0 +1,29 @@
+<style>
+    footer a {
+        text-decoration: underline;
+        
+    }
+</style>
+
+<article class="small scroll" id="footer">
+
+    <footer>
+        <!-- <h5 class="no-margin">Div footer nel file footer.html</h5> -->
+        <a id="privacy_policy">Privacy Policy</a>
+        <a id="cookie_policy">Cookie Policy</a>
+    </footer>
+</article>
+
+<script>
+    let privacy_policy = document.querySelector("#privacy_policy");
+    let cookie_policy = document.querySelector("#cookie_policy");
+
+    privacy_policy.addEventListener("click", () => {
+        window.location.href = "privacy-policy";
+    });
+
+    cookie_policy.addEventListener("click", () => {
+        window.location.href = "cookie-policy-ue";
+    });
+
+</script>
